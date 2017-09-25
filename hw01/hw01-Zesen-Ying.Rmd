@@ -1,0 +1,222 @@
+---
+title: "HW01"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+load("data/nba2017-salary-points.RData")
+ls()
+```
+```{r}
+ salary_in_mil=format(round(salary/1000000,2))
+
+salary_inmil<-as.numeric(salary_in_mil)
+salary_inmil
+```
+
+
+
+```{r}
+experience1<-as.integer(replace(experience,experience == 'R', "0"))
+experience1
+```
+```{r}
+position
+```
+```{r}
+```
+
+
+
+
+
+```{r}
+position_factor<-factor(position,
+                               labels=c("center","power_fwd","point_guard","small_fwd","shoot_guard"))
+
+
+position_factor
+```
+
+
+
+
+```{r}
+table(position_factor)
+```
+```{r}
+plot(points,salary_inmil)
+```
+```{r}
+n<-length(player)
+n
+```
+```{r}
+x_mean=sum(points)/n
+x_mean
+```
+```{r}
+y_mean=sum(salary)/n
+y_mean
+```
+```{r}
+var_x=1/(n-1)*sum((x_mean-points)^2)
+var_x
+```
+```{r}
+var_y=1/(n-1)*sum((y_mean-salary)^2)
+var_y
+```
+```{r}
+sd_x=var_x^(1/2)
+sd_x
+```
+```{r}
+sd_y=var_y^(1/2)
+sd_y
+```
+```{r}
+cov_xy=1/(n-1)*sum((x_mean-points)*(y_mean-salary))
+cov_xy
+```
+```{r}
+cor_xy=cov_xy/sd_x/sd_y
+cor_xy
+```
+```{r}
+b1<-cor_xy*sd_y/sd_x
+b1
+```
+```{r}
+b0<-y_mean-b1*x_mean
+b0
+```
+y_hat<-b0+b1*x
+```{r}
+y_hat=b0+b1*points
+summary(y_hat)
+```
+```{r}
+'y_hat=b0+b1x'
+```
+b1 means the how much the player would earn more if he scores one more point.
+b0 means how much the player earns if he scores 0 point
+
+```{r}
+y_0=b0+b1*0
+y_0
+```
+```{r}
+y_100=b0+b1*100
+y_100
+```
+```{r}
+y_500=b0+b1*500
+y_500
+```
+```{r}
+y_1000=b0+b1*1000
+y_1000
+```
+```{r}
+y_2000=b0+b1*2000
+y_2000
+```
+```{r}
+plot(points, salary_inmil, col="grey", main = "Regression and Lowess Lines")
+abline(y_mean-b1*x_mean ,cor_xy*(sd_y/sd_x), lwd = 2, col = "blue")
+lines(lowess(points, salary_inmil), lwd=2,col= "red")
+```
+```{r}
+e_i<-salary-y_hat
+e_i
+```
+```{r}
+summary(e_i)
+```
+
+
+
+```{r}
+RSS<-sum((salary-y_hat)^2)
+RSS
+```
+```{r}
+TSS<-sum((salary-y_mean)^2)
+TSS
+```
+
+
+```{r}
+R_2=1-RSS/TSS
+R_2
+```
+```{r}
+plot(experience1, salary_inmil)
+lines(lowess(experience1, salary_inmil), lwd=2, col= "red")
+
+```
+
+
+```{r}
+require("scatterplot3d")
+```
+
+
+```{r}
+scatterplot3d(points, experience, salary_inmil)
+```
+```{r}
+
+boxplot(salary_inmil ~ position, ylab = "Salary", xlab = "Positions")
+
+                          
+```
+
+
+#From the scatterplots, does Experience seem to be related with Salary?
+```{r}
+#The scattorplot3d definitely shows that 
+
+
+#From the scatterplots, does Experience seem to be related with Salary?
+#Not really, but players with little experience tend to have less salary. However, players who has a lot of experience don't seem to earn as much as players who are in the prime years (5-10) years of experience. 
+#From the boxplot, does Position seem to be related with Salary?
+#Not really, but more centers tend to have higher salary.
+```
+
+# comments and reflections
+1. To determine the types of data and when to use what type. I saw this in class, but when I did the hw I have to think about the when to use what type by myself.
+2. Calculations
+3. If this was my first time using git, then it was pretty hard for me
+4. I encountered many problems.
+5. Yes, I needed help. I searched on the Internet on how to use certain functions.
+6. I spent more than 10 hours. I accidentally didn't save the file once
+7. Figuring out what I did wrong that caused errors.
+8. Yes, my regression line is not showing up.
+9. I spent a lot of time trying to figure out why my regression line is not showing up
+10. I found an error which is I made salary_in_mil a character and couldn't use it in the last part, so I had to convert it.
+
