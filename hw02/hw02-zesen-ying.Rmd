@@ -1,0 +1,214 @@
+---
+title: "hw02"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
+```{r}
+github <- "https://github.com/ucb-stat133/stat133-fall-2017/raw/master/"
+file <- "data/nba2017-player-statistics.csv"
+csv <- paste0(github, file)
+download.file(url = csv, destfile = 'nba2017-player-statistics.csv')
+```
+```{r}
+dat<-read.csv('nba2017-player-statistics.csv', stringsAsFactors = FALSE, colClasses= c('character',
+                                                                                       'character',
+                                                                                       'factor',
+                                                                                       'character',
+                                                                                       'numeric',
+                                                                                       rep('integer',19)
+                                                                                    
+                                                                                  
+))
+dat
+str(dat)
+```
+
+
+```
+```{r}
+library(readr)
+```
+```{r}
+dat1<-read_csv('nba2017-player-statistics.csv',
+               col_types = cols(player=col_character(),
+                                Team  =col_character(),
+                                Experience =col_character(),
+                                Position=col_factor(c("C","PF","PG","SF","SG")),Salary=col_double()
+                              
+                      
+                                )
+               )
+str(dat1)
+dat1
+```
+
+
+```{r}
+experience1<-as.integer(replace(dat$Experience,dat$Experience == 'R', "0"))
+experience1
+```
+```{r}
+library("dplyr","ggplot2")
+```
+
+
+
+```{r}
+dat2<-mutate(dat1, Missed_FG= FGA-FGM)
+dat3<-mutate(dat2, Missed_FT = FTA-FTM)
+dat4<-mutate(dat3, PTS = 2*Points2+3*Points3+FTM)
+dat5<-mutate(dat4, REB = OREB+DREB)
+dat6<-mutate(dat5, MPG = MIN/GP)
+dat6
+``` 
+```{r}
+
+EFF = ( dat6$PTS + dat6$REB + dat6$AST + dat6$STL + dat6$BLK - dat6$Missed_FG - dat6$Missed_FT - dat6$TO) / dat6$GP
+EFF
+```
+```{r}
+summary(EFF)
+```
+```{r}
+dat7<-mutate(dat6,EFF)
+dat8<-arrange(dat7,desc(EFF))
+dat9<-slice(dat8, 1:10)
+select(dat9,c(Player,Team,Salary,EFF))
+```
+```{r}
+filter(dat7,EFF<0)
+```
+
+
+
+
+```{r}
+cor(EFF,dat6$PTS)
+```
+```{r}
+cor(EFF,dat6$REB)
+```
+```{r}
+cor(EFF,dat6$AST)
+```
+```{r}
+cor(EFF,dat6$STL)
+```
+```{r}
+cor(EFF,dat6$BLK)
+```
+```{r}
+cor(EFF,-dat6$Missed_FG)
+```
+```{r}
+cor(EFF,-dat6$Missed_FT)
+```
+```{r}
+cor(EFF,-dat6$TO)
+```
+```{r}
+cor(EFF,-dat6$GP)
+```
+```{r}
+correlation<-data.frame(PTS=cor(EFF,dat6$PTS),
+                        REB=cor(EFF,dat6$REB),
+                        AST=cor(EFF,dat6$AST),
+                        stl=cor(EFF,dat6$STL),
+                        BLK=cor(EFF,dat6$BLK),
+                        Missed_FG=cor(EFF,-dat6$Missed_FG),
+                        Missed_FT=cor(EFF,-dat6$Missed_FT),
+                        TO= cor(EFF,-dat6$TO) )
+```
+```{r}
+correlation_arrange<-correlation[order(correlation,decreasing=TRUE)]
+correlation_arrange
+```
+```{r}
+barplot(as.matrix(correlation_arrange),
+ylim=c(-1,1),
+main='Correlations between Player Stats and EFF'
+)
+```
+```{r}
+
+
+
+plot(dat7$EFF,dat$Salary,
+     main='scattorplot between Efficiency and Salary'
+    )
+lines(lowess(dat7$EFF,dat$Salary),lwd=2,col="red")
+```
+```{r}
+cor(dat7$EFF,dat$Salary)
+
+
+
+```
+```{r}
+"the linear correlation is 0.655624, which means there is definitely some association between the Efficiency statistic and the salary. The higher the Efficiency of a player is, the more that player earns."
+```
+
+
+```{r}
+dat_20<-filter(dat7,dat7$MPG>20)
+player2<-data.frame(dat_20)
+player2
+```
+```{r}
+plot(player2$EFF,player2$Salary)
+lines(lowess(player2$EFF,player2$Salary),lwd=2,col='red'
+)
+```
+```{r}
+cor(player2$EFF,player2$Salary)
+```
+
+
+'Among more established players, the relationship between the Efficiency statistics. Probably when players are established, salary doesnt depend on EFF as much, instead it may be affected by the popularity of the player."
+
+
+6
+1. The hard part is the preprocessing of data, I always have trouble on that.
+2. the easy part is the calculation
+3. Yes, I googled.
+4. 5 hours
+5. the most comsuming part is the preprocessing of the data
+6. I didn't really understand about the baser and readr.
+7. Don't know some structure of the how the function needed to be used.
+8the exciting part is I finally know what EFF means because I have heard of it a lot but never knew what exactly that was.
+
+
+
+
+
+
+
+
+
+
