@@ -1,0 +1,11 @@
+1. The data is about statistics of all the NBA players that played in the 2016-2017 season.
+2. There are 441 rows.
+3. There are 17 columns.
+4. The column labels are, *experience*,*player*,*points*,*points_four*,*points1*,*points2*,*points3*,*position*,*rdata*,*repo*,*salary*,*team*.   
+5. 
+
+
+
+
+https://www.basketball-reference.com/
+https://www.basketball-reference.com/teams/GSW/2017.html
