@@ -1,0 +1,74 @@
+---
+title: "Tile Plot"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
+
+#my post will be talking about how to use ggplot to visualize the temperature and humidity during a day.
+#first of all, package "ggplot2" needs to be installed
+#and it needs to be brought out:
+
+```{r}
+library(ggplot2)
+```
+
+#In this post, my data is from 'https://weather.com/weather/hourbyhour/l/USCA0087:1:US'
+#the data I used includes, the hourly temperature and hourly humidity from 12:00AM 10/31 to 11:00PM 10/31
+#the data is the weather forcast.
+
+#first of all, I created a dataframe by typing in the data.
+```{r}
+temp<-c(51,51,50,51,50,50,49,49,49,52,54,56,59,60,61,61,60,59,57,55,55,54,53,52)
+time<-c(0, 1,2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,22, 23)
+humidity<-c(97,97,97,96,96,95,97,97,99,93, 90,83,77,72,69,68,70,76,81,87,89,91,94,96)
+
+
+dat<-data.frame(temp,time ,humidity  )
+dat
+```
+#above displayed the dataframe that is just created
+#now time,temp,humidity will be plotted
+#there are three vectors that needed to be plotted
+#I will use geom_tile to incorporate colored tiles to better visualize the data
+#in this case, I plotted time on x-axis and humidity on y axis
+#I gave each tile color so that it is easier to visualize the relationship between time and the other two weather indexes
+
+```{r}
+ggplot(dat, aes(x = time, y = humidity)) + 
+  geom_tile(aes(fill = temp)) + 
+  scale_fill_gradient(low = "blue", high = "red") +
+  labs(y = '% humidity')
+
+```
+#gradient color shows the gradual change of the temperature
+#from the graph, we can easily see that in the afternoon, around 15 o'clock (3pm), the humidity tends to be low and the tiles are more red which means the temperature tendsto be higher.
+
+
+
+
