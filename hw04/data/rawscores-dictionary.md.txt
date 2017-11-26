@@ -1,0 +1,6 @@
+QZ1 is the score of quiz 1 which is 12 points
+QZ2 is the score of quiz 2 which is 18 points
+QZ3 is the score of quiz 3 which is 20 points
+QZ4 is the score of quiz 4 which is 20 points
+EX1 is exam 1 which is 80 points
+EX2 is exam 2 which is 90 points

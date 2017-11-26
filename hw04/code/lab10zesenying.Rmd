@@ -1,0 +1,40 @@
+clean-data-script
+Zesen Ying
+
+library(readr)
+rawscores<-read.csv('/Users/Zesen Ying/stat133/stat133-hws-fall17/hw04/data/rawscores.csv')
+sink(file= '/Users/Zesen Ying/stat133/stat133-hws-fall17/hw04/output/summary-rawscores.txt')
+summary_stat(rawscores)
+sink()
+
+#for loop
+for (i in 1:nraw(rawscores)) {
+  for (j in 1:ncol(rawscores)){
+    if(is.na(rawscores[i,j]==TRUE{
+      rawscores[i,j]=0
+    }))
+  }
+  remove_missing()
+}
+
+
+#rescale
+rawscores(rawscores$Qz1)<-rescale100(rawscores$Qz1,0,12)
+rawscores(rawscores$Qz2)<-rescale100(rawscores$Qz2,0,28)
+rawscores(rawscores$Qz3)<-rescale100(rawscores$Qz3,0,20)
+rawscores(rawscores$Qz4)<-rescale100(rawscores$Qz4,0,20)
+rawscores<-mutate(rawscores,Test1=rescale100(rawscores$EX1,0,80))
+rawscores<-mutate(rawscores,Test2=rescale100(rawscores$EX1,0,90))
+
+
+for (i in 1:nrow(rawscores)){
+  rawscores$Homework[i]<-score_homework(c(rawscores$HW1[i]:rawscores$HW9[i]),drop=TRUE)
+}
+for(i in 1:nrow(rawscores)){
+  rawscores$Quiz[i]<-score_quiz(c(rawscores$QZ1[i]:rawscores$QZ4[i]),drop=TRUE)
+}
+for(i in 1:nrow(rawscores)){
+  rawscores$lab[i]<-score_lab(rawscores$ATT[i])
+}
+for(i in 1:nrow(rawscores)){rawscores$Overall[i]<-0.1*rawscores$lab[i]+0.3rawscores$Homework[i]a+0.15*rawscores$Quiz[i]+0.25*rawscores$Test1[i]+0.25*rawscores$Test2[i]
+}
